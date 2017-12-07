@@ -75,7 +75,6 @@ class ValueIterationAgent(ValueEstimationAgent):
           value function stored in self.values.
         """
         "*** YOUR CODE HERE ***"
-        
         newstatesandprobs = self.mdp.getTransitionStatesAndProbs(state, action)
         q = 0
 
