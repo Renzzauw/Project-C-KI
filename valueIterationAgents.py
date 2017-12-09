@@ -43,15 +43,20 @@ class ValueIterationAgent(ValueEstimationAgent):
         self.iterations = iterations
         self.values = util.Counter() # A Counter is a dict with default 0
 
-        # Write value iteration code here
-        "*** YOUR CODE HERE ***"
+        # loop for every iteration the program has to do
         for iteration in range(0, iterations):
-            newvalues = self.values.copy()
 
+            # copy the old values to a newvalues dict so we can use the old values to calculate the new ones
+            newvalues = dict()
+            for key in self.values:
+                newvalues[key] = self.values[key]
+
+            # get each state and for each get the possible actions
             for state in mdp.getStates():
                 actions = mdp.getPossibleActions(state)
                 possiblevalues = []
 
+                # calculate the possible values per action and set the max as the new state
                 for action in actions:
                     possiblevalues.append(self.computeQValueFromValues(state, action))
 
@@ -60,6 +65,7 @@ class ValueIterationAgent(ValueEstimationAgent):
                 else:
                     newvalues[state] = 0
 
+            # set the values to the new values
             self.values = newvalues
 
     def getValue(self, state):
@@ -74,10 +80,12 @@ class ValueIterationAgent(ValueEstimationAgent):
           Compute the Q-value of action in state from the
           value function stored in self.values.
         """
-        "*** YOUR CODE HERE ***"
+
+        # get all the new states and probabilities
         newstatesandprobs = self.mdp.getTransitionStatesAndProbs(state, action)
         q = 0
 
+        # loop through them and calculate the reward and update the q value
         for newstateandprob in newstatesandprobs:
             newstate = newstateandprob[0]
             prob = newstateandprob[1]
@@ -95,17 +103,20 @@ class ValueIterationAgent(ValueEstimationAgent):
           there are no legal actions, which is the case at the
           terminal state, you should return None.
         """
-        "*** YOUR CODE HERE ***"
+        # instantiate a dict for the q values
         qs = dict()
 
+        # fill the dict with q values
         for action in self.mdp.getPossibleActions(state):
             qs[action] = self.computeQValueFromValues(state, action)
 
+        # return the key with the highest value
         if len(qs) > 0:
             keys = qs.keys()
             values = qs.values()
             return keys[values.index(max(values))]
 
+        # if there are no values in the dict, return None
         return None
 
     def getPolicy(self, state):
